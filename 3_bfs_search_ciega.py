@@ -1,9 +1,9 @@
 """
-PROYECTO: Búsqueda Ciega - Algoritmo BFS con Interfaz Gráfica y Carga JSON
+PROYECTO: Búsqueda Ciega - Algoritmo BFS Puro con Interfaz Gráfica
 Autor: Sistema de IA
-Descripción: Implementación de búsqueda en amplitud (BFS) con GUI interactiva
+Descripción: Implementación de búsqueda ciega en amplitud (BFS) con GUI interactiva
 para visualizar el proceso de búsqueda en grafos direccionados.
-NUEVA FUNCIONALIDAD: Carga de grafos desde archivos JSON
+NOTA: Búsqueda ciega NO considera pesos para encontrar caminos óptimos.
 """
 
 import tkinter as tk
@@ -17,7 +17,8 @@ import json
 class Grafo:
     """
     Clase que representa un grafo direccionado con pesos en las aristas.
-    Maneja la estructura de datos y operaciones básicas del grafo.
+    Para búsqueda ciega, los pesos se almacenan solo para visualización,
+    NO se usan en el algoritmo de búsqueda.
     """
     
     def __init__(self):
@@ -38,11 +39,17 @@ class Grafo:
             return False
     
     def obtener_vecinos(self, nodo):
-        """Retorna los nodos vecinos de un nodo dado."""
+        """
+        Retorna SOLO los nodos vecinos de un nodo dado.
+        Para búsqueda ciega, NO retorna los pesos.
+        """
         return [destino for destino, _ in self.adyacencias[nodo]]
     
     def obtener_peso(self, origen, destino):
-        """Obtiene el peso de la arista entre dos nodos."""
+        """
+        Obtiene el peso de la arista entre dos nodos.
+        Solo se usa para visualización del grafo.
+        """
         for dest, peso in self.adyacencias[origen]:
             if dest == destino:
                 return peso
@@ -94,9 +101,7 @@ class Grafo:
             raise ValueError(f"Error al procesar el archivo: {str(e)}")
     
     def exportar_a_json(self):
-        """
-        Exporta el grafo actual a formato JSON.
-        """
+        """Exporta el grafo actual a formato JSON."""
         datos = {
             "nodos": list(self.nodos),
             "aristas": []
@@ -119,8 +124,8 @@ class Grafo:
 
 class AlgoritmoBFS:
     """
-    Implementación del algoritmo de Búsqueda en Amplitud (BFS).
-    Incluye funciones para búsqueda paso a paso y reconstrucción de caminos.
+    Implementación PURA del algoritmo de Búsqueda Ciega en Amplitud (BFS).
+    NO considera pesos ni distancias, solo encuentra UN camino válido.
     """
     
     def __init__(self, grafo):
@@ -133,7 +138,8 @@ class AlgoritmoBFS:
     
     def buscar_camino(self, inicio, final):
         """
-        Ejecuta BFS para encontrar un camino del nodo inicial al final.
+        Ejecuta BFS CIEGA para encontrar UN camino del nodo inicial al final.
+        NO optimiza por distancia, solo encuentra el primer camino válido.
         Retorna: (camino_encontrado, lista_de_pasos_detallados)
         """
         # Reiniciar estado
@@ -162,7 +168,7 @@ class AlgoritmoBFS:
         
         paso = 1
         
-        # Ejecutar BFS
+        # Ejecutar BFS CIEGA
         while self.cola:
             nodo_actual = self.cola.popleft()
             
@@ -188,7 +194,7 @@ class AlgoritmoBFS:
                 })
                 return camino, self.pasos_busqueda
             
-            # Explorar vecinos
+            # Explorar vecinos (SIN considerar pesos)
             vecinos = self.grafo.obtener_vecinos(nodo_actual)
             vecinos_nuevos = []
             
@@ -234,13 +240,13 @@ class AlgoritmoBFS:
 
 class InterfazGrafica:
     """
-    Interfaz gráfica principal del programa.
-    Maneja la interacción con el usuario y la visualización del algoritmo.
+    Interfaz gráfica para búsqueda ciega BFS.
+    Muestra el proceso de búsqueda SIN optimización por distancia.
     """
     
     def __init__(self):
         self.ventana = tk.Tk()
-        self.ventana.title("Búsqueda Ciega - Algoritmo BFS con Carga JSON")
+        self.ventana.title("Búsqueda Ciega - BFS (Sin optimización de distancia)")
         self.ventana.geometry("1200x800")
         self.ventana.configure(bg='#f0f0f0')
         
@@ -300,18 +306,23 @@ class InterfazGrafica:
         self.entry_peso = ttk.Entry(grupo_datos, width=10)
         self.entry_peso.grid(row=2, column=1, padx=5, pady=2)
         
+        # Nota sobre búsqueda ciega
+        nota_label = ttk.Label(grupo_datos, text="⚠️ Nota: Distancia solo para visualización\n(Búsqueda ciega NO la usa)", 
+                              font=("Arial", 8), foreground="orange")
+        nota_label.grid(row=3, column=0, columnspan=2, pady=5)
+        
         # Botones de control de datos
-        ttk.Button(grupo_datos, text="Agregar Arista", command=self._agregar_arista).grid(row=3, column=0, columnspan=2, pady=5)
-        ttk.Button(grupo_datos, text="Finalizar Ingreso", command=self._finalizar_ingreso).grid(row=4, column=0, columnspan=2, pady=2)
-        ttk.Button(grupo_datos, text="Limpiar Grafo", command=self._limpiar_grafo).grid(row=5, column=0, columnspan=2, pady=2)
+        ttk.Button(grupo_datos, text="Agregar Arista", command=self._agregar_arista).grid(row=4, column=0, columnspan=2, pady=5)
+        ttk.Button(grupo_datos, text="Finalizar Ingreso", command=self._finalizar_ingreso).grid(row=5, column=0, columnspan=2, pady=2)
+        ttk.Button(grupo_datos, text="Limpiar Grafo", command=self._limpiar_grafo).grid(row=6, column=0, columnspan=2, pady=2)
         
         # Lista de aristas ingresadas
-        ttk.Label(grupo_datos, text="Aristas ingresadas:").grid(row=6, column=0, columnspan=2, sticky=tk.W, pady=(10, 2))
-        self.lista_aristas = tk.Listbox(grupo_datos, height=5, width=25)
-        self.lista_aristas.grid(row=7, column=0, columnspan=2, pady=2)
+        ttk.Label(grupo_datos, text="Aristas ingresadas:").grid(row=7, column=0, columnspan=2, sticky=tk.W, pady=(10, 2))
+        self.lista_aristas = tk.Listbox(grupo_datos, height=4, width=25)
+        self.lista_aristas.grid(row=8, column=0, columnspan=2, pady=2)
         
-        # === SECCIÓN: BÚSQUEDA ===
-        grupo_busqueda = ttk.LabelFrame(frame_izquierdo, text="🔍 Configuración de Búsqueda", padding=10)
+        # === SECCIÓN: BÚSQUEDA CIEGA ===
+        grupo_busqueda = ttk.LabelFrame(frame_izquierdo, text="🔍 Búsqueda Ciega (BFS)", padding=10)
         grupo_busqueda.pack(fill=tk.X, pady=(0, 10))
         
         ttk.Label(grupo_busqueda, text="Nodo Inicial:").grid(row=0, column=0, sticky=tk.W, pady=2)
@@ -322,7 +333,12 @@ class InterfazGrafica:
         self.entry_final = ttk.Entry(grupo_busqueda, width=10)
         self.entry_final.grid(row=1, column=1, padx=5, pady=2)
         
-        ttk.Button(grupo_busqueda, text="Buscar Camino", command=self._iniciar_busqueda).grid(row=2, column=0, columnspan=2, pady=5)
+        ttk.Button(grupo_busqueda, text="🔍 Buscar Camino (BFS)", command=self._iniciar_busqueda).grid(row=2, column=0, columnspan=2, pady=5)
+        
+        # Explicación de búsqueda ciega
+        explicacion = ttk.Label(grupo_busqueda, text="💡 BFS encuentra UN camino válido\n(NO el más corto en distancia)", 
+                               font=("Arial", 8), foreground="blue")
+        explicacion.grid(row=3, column=0, columnspan=2, pady=5)
         
         # === SECCIÓN: CONTROL DE ANIMACIÓN ===
         grupo_animacion = ttk.LabelFrame(frame_izquierdo, text="🎬 Control de Animación", padding=10)
@@ -346,7 +362,7 @@ class InterfazGrafica:
         self.texto_info.pack(fill=tk.BOTH, expand=True)
         
         # === SECCIÓN: VISUALIZACIÓN ===
-        grupo_visual = ttk.LabelFrame(frame_derecho, text="🎯 Visualización del Grafo y Búsqueda", padding=10)
+        grupo_visual = ttk.LabelFrame(frame_derecho, text="🎯 Visualización del Grafo y Búsqueda Ciega", padding=10)
         grupo_visual.pack(fill=tk.BOTH, expand=True)
         
         # Canvas para dibujar el grafo
@@ -362,7 +378,7 @@ class InterfazGrafica:
             ("🔴 Final", "#F44336"),
             ("🟡 En Cola", "#FFEB3B"),
             ("🔵 Visitado", "#2196F3"),
-            ("🟣 Camino Final", "#9C27B0")
+            ("🟣 Camino Encontrado", "#9C27B0")
         ]
         
         for i, (texto, color) in enumerate(colores):
@@ -384,17 +400,22 @@ FORMATO JSON PARA CARGA DE GRAFO:
     ]
 }
 
-NOTAS:
+NOTAS IMPORTANTES SOBRE BÚSQUEDA CIEGA:
 • La sección "nodos" es opcional
-• Los nodos se crean automáticamente al agregar aristas
+• Los pesos se almacenan SOLO para visualización del grafo
+• El algoritmo BFS NO usa los pesos para encontrar el camino
+• BFS encuentra UN camino válido (no necesariamente el más corto)
 • Los nombres de nodos se convertirán a mayúsculas
-• Los pesos deben ser números (enteros o decimales)
 • Se pueden usar nodos alfanuméricos (A, B1, NODE_1, etc.)
+
+DIFERENCIA CLAVE:
+• Búsqueda Ciega: Ignora pesos, encuentra cualquier camino
+• Búsqueda Informada: Usa pesos, encuentra camino óptimo
         """
         
         ventana_formato = tk.Toplevel(self.ventana)
-        ventana_formato.title("Formato JSON")
-        ventana_formato.geometry("500x400")
+        ventana_formato.title("Formato JSON - Búsqueda Ciega")
+        ventana_formato.geometry("600x450")
         ventana_formato.transient(self.ventana)
         ventana_formato.grab_set()
         
@@ -432,20 +453,23 @@ NOTAS:
                 info_carga += f"📄 Archivo: {archivo.split('/')[-1]}\n"
                 info_carga += f"📊 Aristas cargadas: {aristas_cargadas}\n"
                 info_carga += f"🔸 Nodos: {len(self.grafo.nodos)} ({', '.join(sorted(self.grafo.nodos))})\n"
+                info_carga += f"⚠️ RECORDATORIO: Búsqueda ciega NO usa pesos para optimización\n"
                 
                 if errores:
                     info_carga += f"\n⚠️ ERRORES ENCONTRADOS ({len(errores)}):\n"
-                    for error in errores[:5]:  # Mostrar solo los primeros 5 errores
+                    for error in errores[:3]:  # Mostrar solo los primeros 3 errores
                         info_carga += f"• {error}\n"
-                    if len(errores) > 5:
-                        info_carga += f"• ... y {len(errores) - 5} errores más\n"
+                    if len(errores) > 3:
+                        info_carga += f"• ... y {len(errores) - 3} errores más\n"
                 
                 self._agregar_info(info_carga)
                 
                 # Mostrar resumen en messagebox
                 mensaje = f"Grafo cargado exitosamente!\n\nAristas: {aristas_cargadas}\nNodos: {len(self.grafo.nodos)}"
+                mensaje += f"\n\n⚠️ Recordatorio: BFS es búsqueda CIEGA"
+                mensaje += f"\n(No optimiza por distancia)"
                 if errores:
-                    mensaje += f"\nErrores: {len(errores)} (ver detalles en el panel de información)"
+                    mensaje += f"\nErrores: {len(errores)} (ver detalles en el panel)"
                 
                 messagebox.showinfo("Carga Exitosa", mensaje)
                 
@@ -525,6 +549,7 @@ NOTAS:
             self._dibujar_grafo()
             
             self._agregar_info(f"✅ Arista agregada: {origen} → {destino} (peso: {peso})")
+            self._agregar_info(f"   ⚠️ Nota: BFS NO usa el peso para búsqueda")
         else:
             messagebox.showerror("Error", "El peso debe ser un número válido")
     
@@ -538,11 +563,15 @@ NOTAS:
 📊 RESUMEN DEL GRAFO:
 • Nodos: {len(self.grafo.nodos)} ({', '.join(sorted(self.grafo.nodos))})
 • Aristas: {len(self.grafo.aristas)}
+• Tipo: Búsqueda CIEGA (BFS)
 • Listo para búsqueda
+
+⚠️ IMPORTANTE: BFS NO optimiza por distancia
+   Solo encuentra UN camino válido
         """
         
         self._agregar_info(resumen)
-        messagebox.showinfo("Ingreso Finalizado", f"Grafo creado exitosamente!\n\nNodos: {len(self.grafo.nodos)}\nAristas: {len(self.grafo.aristas)}")
+        messagebox.showinfo("Ingreso Finalizado", f"Grafo creado exitosamente!\n\nNodos: {len(self.grafo.nodos)}\nAristas: {len(self.grafo.aristas)}\n\n⚠️ Recordatorio: Búsqueda CIEGA")
     
     def _limpiar_grafo(self):
         """Limpia todos los datos del grafo."""
@@ -557,7 +586,7 @@ NOTAS:
         self._agregar_info("🗑 Grafo limpiado")
     
     def _iniciar_busqueda(self):
-        """Inicia el proceso de búsqueda BFS."""
+        """Inicia el proceso de búsqueda CIEGA BFS."""
         inicio = self.entry_inicio.get().strip().upper()
         final = self.entry_final.get().strip().upper()
         
@@ -569,26 +598,58 @@ NOTAS:
             messagebox.showwarning("Advertencia", "Primero debe crear un grafo")
             return
         
-        self._agregar_info(f"\n🚀 INICIANDO BÚSQUEDA BFS: {inicio} → {final}")
-        self._agregar_info("=" * 40)
+        self._agregar_info(f"\n🔍 INICIANDO BÚSQUEDA CIEGA (BFS): {inicio} → {final}")
+        self._agregar_info("=" * 45)
+        self._agregar_info("⚠️ BÚSQUEDA CIEGA: NO considera pesos/distancias")
+        self._agregar_info("🎯 Objetivo: Encontrar UN camino válido")
         
-        # Ejecutar BFS
+        # Ejecutar BFS CIEGO
         camino, pasos = self.algoritmo_bfs.buscar_camino(inicio, final)
         self.pasos_busqueda = pasos
         self.paso_actual_animacion = 0
         
         if camino:
-            distancia_total = self._calcular_distancia_camino(camino)
             self._agregar_info(f"✅ CAMINO ENCONTRADO: {' → '.join(camino)}")
-            self._agregar_info(f"📏 Distancia total: {distancia_total:.1f}")
-            self._agregar_info(f"📊 Pasos de búsqueda: {len(pasos)}")
+            self._agregar_info(f"📊 Número de saltos: {len(camino) - 1}")
+            self._agregar_info(f"🔄 Pasos de búsqueda ejecutados: {len(pasos)}")
+            self._agregar_info(f"👁️ Nodos explorados: {len([p for p in pasos if 'visitados' in p and p['visitados']])}")
+            
+            # Mostrar información adicional solo para referencia (NO para optimización)
+            info_referencia = self._obtener_info_referencia_camino(camino)
+            if info_referencia:
+                self._agregar_info(f"\n📋 Información de referencia del camino:")
+                self._agregar_info(f"    (Solo para visualización, NO usada en búsqueda)")
+                self._agregar_info(info_referencia)
             
             # Mostrar el camino final resaltado en el canvas
             self._dibujar_grafo(camino)
         else:
             self._agregar_info("❌ NO SE ENCONTRÓ CAMINO")
+            self._agregar_info("🔍 No existe conexión entre los nodos especificados")
         
         self._agregar_info("\n🎬 Use los controles de animación para ver el proceso paso a paso")
+    
+    def _obtener_info_referencia_camino(self, camino):
+        """
+        Obtiene información de referencia del camino encontrado.
+        IMPORTANTE: Esta información es SOLO para mostrar, NO se usa en la búsqueda.
+        """
+        if len(camino) < 2:
+            return None
+        
+        distancia_total = 0
+        info_detalle = []
+        
+        for i in range(len(camino) - 1):
+            peso = self.grafo.obtener_peso(camino[i], camino[i + 1])
+            if peso is not None:
+                distancia_total += peso
+                info_detalle.append(f"    {camino[i]} → {camino[i + 1]}: {peso}")
+        
+        info = f"    Distancia total acumulada: {distancia_total:.1f}\n"
+        info += "    Detalle por arista:\n" + "\n".join(info_detalle)
+        
+        return info
     
     def _iniciar_animacion(self):
         """Inicia la animación del proceso de búsqueda."""
@@ -664,7 +725,7 @@ NOTAS:
     def _animacion_completada(self):
         """Se ejecuta cuando la animación termina."""
         self.animacion_activa = False
-        self._agregar_info("\n🏁 ANIMACIÓN COMPLETADA")
+        self._agregar_info("\n🏁 ANIMACIÓN DE BÚSQUEDA CIEGA COMPLETADA")
     
     def _dibujar_grafo(self, camino_final=None):
         """Dibuja el grafo en el canvas."""
@@ -892,7 +953,7 @@ NOTAS:
             fill="white", outline="gray", width=1
         )
         
-        # Dibujar etiqueta del peso
+        # Dibujar etiqueta del peso (SOLO para visualización)
         color_texto = "#9C27B0" if es_camino_final else "red"
         etiqueta = self.canvas.create_text(
             label_x, label_y, text=str(peso),
@@ -961,19 +1022,6 @@ NOTAS:
                 fill=color, outline=color, width=1
             )
     
-    def _calcular_distancia_camino(self, camino):
-        """Calcula la distancia total de un camino."""
-        if len(camino) < 2:
-            return 0
-        
-        distancia_total = 0
-        for i in range(len(camino) - 1):
-            peso = self.grafo.obtener_peso(camino[i], camino[i + 1])
-            if peso is not None:
-                distancia_total += peso
-        
-        return distancia_total
-    
     def _agregar_info(self, texto):
         """Agrega texto al área de información."""
         self.texto_info.insert(tk.END, texto + "\n")
@@ -983,8 +1031,13 @@ NOTAS:
         """Inicia la aplicación."""
         # Mensaje de bienvenida
         bienvenida = """
-🎓 BÚSQUEDA CIEGA - ALGORITMO BFS CON CARGA JSON
-==============================================
+🎓 BÚSQUEDA CIEGA - ALGORITMO BFS PURO
+=========================================
+
+⚠️ IMPORTANTE: BÚSQUEDA CIEGA
+• NO considera pesos/distancias para tomar decisiones
+• Solo encuentra UN camino válido (no el óptimo)
+• Los pesos se muestran SOLO para visualización del grafo
 
 📋 INSTRUCCIONES:
 
@@ -998,15 +1051,15 @@ NOTAS:
 • Haga clic en "Finalizar Ingreso" cuando termine
 • Especifique nodos inicial y final para la búsqueda
 
-🔍 BÚSQUEDA:
-• Presione "Buscar Camino" para ejecutar BFS
+🔍 BÚSQUEDA CIEGA:
+• Presione "Buscar Camino (BFS)" para ejecutar búsqueda ciega
 • Use los controles de animación para visualizar el proceso
-• BFS garantiza encontrar el camino con menor número de saltos
+• BFS encuentra el primer camino válido (menor número de saltos)
 
 💾 EXPORTAR:
 • Use "Exportar Grafo a JSON" para guardar su trabajo
 
-¡Comience cargando un archivo JSON o ingresando su grafo manualmente! 🚀
+¡Recuerde: Esta es búsqueda CIEGA, no optimiza por distancia! 🚀
         """
         
         self.texto_info.insert(tk.END, bienvenida)
@@ -1016,7 +1069,8 @@ NOTAS:
 
 def main():
     """Función principal del programa."""
-    print("🚀 Iniciando aplicación de Búsqueda Ciega con carga JSON...")
+    print("🚀 Iniciando aplicación de Búsqueda Ciega (BFS Puro)...")
+    print("⚠️ RECORDATORIO: Búsqueda ciega NO optimiza por distancia")
     print("📊 Cargando interfaz gráfica...")
     
     try:
