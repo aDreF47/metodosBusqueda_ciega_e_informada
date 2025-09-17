@@ -1,6 +1,6 @@
 """
 PROYECTO: Búsqueda Ciega - Algoritmo BFS Puro con Interfaz Gráfica
-Autor: Sistema de IA
+Autor: Fernando Celadita
 Descripción: Implementación de búsqueda ciega en amplitud (BFS) con GUI interactiva
 para visualizar el proceso de búsqueda en grafos direccionados.
 NOTA: Búsqueda ciega NO considera pesos para encontrar caminos óptimos.
