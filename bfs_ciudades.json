@@ -1,0 +1,71 @@
+{
+  "descripcion": "Red de transporte entre ciudades principales de Sudamérica",
+  "nodos": ["LIMA", "BOGOTA", "CARACAS", "QUITO", "LAPAZ", "SANTIAGO", "BUENOS_AIRES", "BRASILIA", "MONTEVIDEO", "ASUNCION", "GEORGETOWN", "PARAMARIBO"],
+  "aristas": [
+    {"origen": "LIMA", "destino": "BOGOTA", "peso": 1879},
+    {"origen": "LIMA", "destino": "QUITO", "peso": 1165},
+    {"origen": "LIMA", "destino": "LAPAZ", "peso": 445},
+    {"origen": "LIMA", "destino": "SANTIAGO", "peso": 2138},
+    {"origen": "LIMA", "destino": "BRASILIA", "peso": 3154},
+    
+    {"origen": "BOGOTA", "destino": "CARACAS", "peso": 565},
+    {"origen": "BOGOTA", "destino": "QUITO", "peso": 736},
+    {"origen": "BOGOTA", "destino": "LIMA", "peso": 1879},
+    {"origen": "BOGOTA", "destino": "BRASILIA", "peso": 2345},
+    {"origen": "BOGOTA", "destino": "GEORGETOWN", "peso": 1245},
+    
+    {"origen": "CARACAS", "destino": "BOGOTA", "peso": 565},
+    {"origen": "CARACAS", "destino": "GEORGETOWN", "peso": 743},
+    {"origen": "CARACAS", "destino": "PARAMARIBO", "peso": 854},
+    {"origen": "CARACAS", "destino": "BRASILIA", "peso": 2587},
+    
+    {"origen": "QUITO", "destino": "BOGOTA", "peso": 736},
+    {"origen": "QUITO", "destino": "LIMA", "peso": 1165},
+    {"origen": "QUITO", "destino": "CARACAS", "peso": 1387},
+    
+    {"origen": "LAPAZ", "destino": "LIMA", "peso": 445},
+    {"origen": "LAPAZ", "destino": "SANTIAGO", "peso": 1856},
+    {"origen": "LAPAZ", "destino": "BUENOS_AIRES", "peso": 1743},
+    {"origen": "LAPAZ", "destino": "ASUNCION", "peso": 1245},
+    {"origen": "LAPAZ", "destino": "BRASILIA", "peso": 1387},
+    
+    {"origen": "SANTIAGO", "destino": "LIMA", "peso": 2138},
+    {"origen": "SANTIAGO", "destino": "LAPAZ", "peso": 1856},
+    {"origen": "SANTIAGO", "destino": "BUENOS_AIRES", "peso": 1065},
+    {"origen": "SANTIAGO", "destino": "MONTEVIDEO", "peso": 1254},
+    
+    {"origen": "BUENOS_AIRES", "destino": "SANTIAGO", "peso": 1065},
+    {"origen": "BUENOS_AIRES", "destino": "MONTEVIDEO", "peso": 201},
+    {"origen": "BUENOS_AIRES", "destino": "ASUNCION", "peso": 1065},
+    {"origen": "BUENOS_AIRES", "destino": "LAPAZ", "peso": 1743},
+    {"origen": "BUENOS_AIRES", "destino": "BRASILIA", "peso": 1148},
+    
+    {"origen": "BRASILIA", "destino": "LIMA", "peso": 3154},
+    {"origen": "BRASILIA", "destino": "BOGOTA", "peso": 2345},
+    {"origen": "BRASILIA", "destino": "CARACAS", "peso": 2587},
+    {"origen": "BRASILIA", "destino": "LAPAZ", "peso": 1387},
+    {"origen": "BRASILIA", "destino": "BUENOS_AIRES", "peso": 1148},
+    {"origen": "BRASILIA", "destino": "ASUNCION", "peso": 1098},
+    {"origen": "BRASILIA", "destino": "GEORGETOWN", "peso": 1876},
+    {"origen": "BRASILIA", "destino": "PARAMARIBO", "peso": 2154},
+    
+    {"origen": "MONTEVIDEO", "destino": "BUENOS_AIRES", "peso": 201},
+    {"origen": "MONTEVIDEO", "destino": "SANTIAGO", "peso": 1254},
+    {"origen": "MONTEVIDEO", "destino": "ASUNCION", "peso": 1265},
+    {"origen": "MONTEVIDEO", "destino": "BRASILIA", "peso": 1789},
+    
+    {"origen": "ASUNCION", "destino": "BUENOS_AIRES", "peso": 1065},
+    {"origen": "ASUNCION", "destino": "MONTEVIDEO", "peso": 1265},
+    {"origen": "ASUNCION", "destino": "LAPAZ", "peso": 1245},
+    {"origen": "ASUNCION", "destino": "BRASILIA", "peso": 1098},
+    
+    {"origen": "GEORGETOWN", "destino": "CARACAS", "peso": 743},
+    {"origen": "GEORGETOWN", "destino": "BOGOTA", "peso": 1245},
+    {"origen": "GEORGETOWN", "destino": "PARAMARIBO", "peso": 278},
+    {"origen": "GEORGETOWN", "destino": "BRASILIA", "peso": 1876},
+    
+    {"origen": "PARAMARIBO", "destino": "CARACAS", "peso": 854},
+    {"origen": "PARAMARIBO", "destino": "GEORGETOWN", "peso": 278},
+    {"origen": "PARAMARIBO", "destino": "BRASILIA", "peso": 2154}
+  ]
+}
