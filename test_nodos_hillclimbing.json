@@ -1,0 +1,79 @@
+{
+  "nodos": [
+    "B",
+    "E",
+    "D",
+    "M",
+    "C",
+    "F",
+    "A"
+  ],
+  "aristas": [
+    {
+      "origen": "A",
+      "destino": "B",
+      "peso": 1.0
+    },
+    {
+      "origen": "A",
+      "destino": "C",
+      "peso": 2.0
+    },
+    {
+      "origen": "A",
+      "destino": "D",
+      "peso": 2.0
+    },
+    {
+      "origen": "B",
+      "destino": "E",
+      "peso": 5.0
+    },
+    {
+      "origen": "C",
+      "destino": "D",
+      "peso": 3.0
+    },
+    {
+      "origen": "C",
+      "destino": "E",
+      "peso": 3.0
+    },
+    {
+      "origen": "D",
+      "destino": "E",
+      "peso": 1.0
+    },
+    {
+      "origen": "E",
+      "destino": "F",
+      "peso": 5.0
+    },
+    {
+      "origen": "D",
+      "destino": "F",
+      "peso": 10.0
+    },
+    {
+      "origen": "F",
+      "destino": "M",
+      "peso": 6.0
+    },
+    {
+      "origen": "D",
+      "destino": "M",
+      "peso": 10.0
+    },
+    {
+      "origen": "M",
+      "destino": "C",
+      "peso": 3.0
+    },
+    {
+      "origen": "B",
+      "destino": "D",
+      "peso": 20.0
+    }
+  ],
+  "posiciones": {}
+}
